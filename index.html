@@ -21,8 +21,8 @@
             animation: gradienteSfondo 10s ease infinite;
             font-family: 'Fredoka', sans-serif;
             text-align: center;
-            overflow: hidden; /* Blocca lo scorrimento */
-            touch-action: none; /* Migliora la risposta su mobile */
+            overflow: hidden;
+            /* Ho tolto il blocco che impediva di premere il tasto Sì sui telefoni! */
         }
 
         @keyframes gradienteSfondo {
@@ -49,7 +49,6 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
             z-index: 20;
             border: 4px solid white;
-            pointer-events: none;
         }
 
         .btn-container {
@@ -57,128 +56,4 @@
             gap: 15px;
             align-items: center;
             justify-content: center;
-            z-index: 30;
-            width: 100%;
-            height: 80px;
-        }
-
-        button {
-            border: none;
-            border-radius: 50px;
-            padding: 12px 30px;
-            font-size: 18px;
-            font-family: 'Fredoka', sans-serif;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        #btn-si {
-            background-color: #4cd137;
-            color: white;
-            transform-origin: center;
-        }
-
-        #btn-no {
-            background-color: #ff4757;
-            color: white;
-            transition: left 0.1s, top 0.1s;
-        }
-
-        #messaggio-successo {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            height: 100%;
-            z-index: 50;
-        }
-    </style>
-</head>
-<body>
-
-    <div id="schermata-domanda">
-        <img class="media-iniziale" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTQyZ3N5Zzh4Z2w0OTZ6MzRyNzJ4ejZ2NWdyd2k2cW9xNGc5YjJ5ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oriO6qJiXajN0TyDu/giphy.gif" alt="Orsetto">
-        
-        <h1>Vuoi essere il mio San Valentino? 🥺</h1>
-        
-        <div class="btn-container">
-            <button id="btn-si" onclick="haDettoSi()">Sì! ❤️</button>
-            <button id="btn-no">No 💔</button>
-        </div>
-    </div>
-
-    <div id="messaggio-successo">
-        <h1 style="font-size: 3rem; line-height: 1.2;">Ottima scelta marmotta! 🥰</h1>
-    </div>
-
-    <script>
-        const btnNo = document.getElementById("btn-no");
-        const btnSi = document.getElementById("btn-si");
-        let grandezzaSi = 1;
-        let tentativi = 0;
-
-        function spostaNo(e) {
-            if(e) e.preventDefault(); 
-            
-            tentativi++;
-
-            if (grandezzaSi < 10) {
-                grandezzaSi += 0.3;
-                btnSi.style.transform = `scale(${grandezzaSi})`;
-            }
-
-            btnNo.style.position = "fixed"; 
-
-            const margine = 50; 
-            const maxX = window.innerWidth - btnNo.offsetWidth - margine;
-            const maxY = window.innerHeight - btnNo.offsetHeight - margine;
-
-            const randomX = Math.random() * maxX + (margine / 2);
-            const randomY = Math.random() * maxY + (margine / 2);
-
-            btnNo.style.left = randomX + "px";
-            btnNo.style.top = randomY + "px";
-        }
-
-        btnNo.addEventListener("mouseover", spostaNo); 
-        btnNo.addEventListener("touchstart", spostaNo); 
-        btnNo.addEventListener("click", spostaNo); 
-
-        function haDettoSi() {
-            document.getElementById("schermata-domanda").style.display = "none";
-            document.getElementById("messaggio-successo").style.display = "flex";
-            
-            creaCuori();
-        }
-
-        function creaCuori() {
-            const colors = ["#ff0000", "#ff4d4d", "#ff9999", "#ffffff"];
-            for (let i = 0; i < 50; i++) {
-                setTimeout(() => {
-                    const cuore = document.createElement("div");
-                    cuore.innerHTML = "❤️";
-                    cuore.style.position = "fixed";
-                    cuore.style.left = Math.random() * 100 + "vw";
-                    cuore.style.top = "100vh";
-                    cuore.style.fontSize = (Math.random() * 20 + 20) + "px";
-                    cuore.style.transition = "top 3s ease-out, opacity 3s";
-                    cuore.style.zIndex = "100";
-                    document.body.appendChild(cuore);
-
-                    requestAnimationFrame(() => {
-                        cuore.style.top = "-10vh";
-                        cuore.style.opacity = "0";
-                    });
-
-                    setTimeout(() => { cuore.remove(); }, 3000);
-                }, i * 50);
-            }
-        }
-    </script>
-
-</body>
-</html>
+            z-index:
