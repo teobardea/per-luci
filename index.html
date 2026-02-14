@@ -47,18 +47,17 @@
             animation: battito 1.5s infinite;
         }
         
-        /* IL NUOVO BOX QUADRATO NERO */
         .banana-box {
             background-color: black;
-            border: 4px solid white; /* Bordo bianco spesso */
-            padding: 20px; /* Spazio interno */
-            border-radius: 10px; /* Angoli leggermente arrotondati per estetica */
-            max-width: 90%; /* Per non toccare i bordi su cellulare */
-            box-shadow: 0 8px 20px rgba(0,0,0,0.3); /* Ombra per farlo risaltare */
+            border: 4px solid white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 90%;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
 
         .intro-testo-banana {
-            color: white; /* Scritta bianca */
+            color: white;
             font-size: 1.6rem;
             font-weight: 600;
             margin: 0;
@@ -154,10 +153,10 @@
         const btnSi = document.getElementById("btn-si");
         let grandezzaSi = 1;
 
-        // --- GESTIONE TASTO NO CHE SCAPPA ---
+        // --- GESTIONE TASTO NO CHE SCAPPA CON ANTI-SOVRAPPOSIZIONE ---
         function spostaNo() {
-            if (grandezzaSi < 10) {
-                grandezzaSi += 0.3;
+            if (grandezzaSi < 15) {
+                grandezzaSi += 0.4;
                 btnSi.style.transform = `scale(${grandezzaSi})`;
             }
 
@@ -166,8 +165,38 @@
             const maxX = window.innerWidth - btnNo.offsetWidth - margine;
             const maxY = window.innerHeight - btnNo.offsetHeight - margine;
 
-            const randomX = Math.floor(Math.random() * maxX) + (margine / 2);
-            const randomY = Math.floor(Math.random() * maxY) + (margine / 2);
+            // Otteniamo le dimensioni e la posizione attuale del tasto SI gigante
+            const rectSi = btnSi.getBoundingClientRect();
+            
+            let randomX, randomY;
+            let sovrappone = true;
+            let tentativi = 0;
+
+            // Il ciclo continua a cercare coordinate finché non trova uno spazio vuoto
+            // o finché non ci prova troppe volte (quando il SI occupa tutto lo schermo)
+            while (sovrappone && tentativi < 50) {
+                randomX = Math.floor(Math.random() * maxX) + (margine / 2);
+                randomY = Math.floor(Math.random() * maxY) + (margine / 2);
+
+                // Ingombro futuro del pulsante NO
+                const noRight = randomX + btnNo.offsetWidth;
+                const noBottom = randomY + btnNo.offsetHeight;
+
+                // Margine di sicurezza di 20px attorno al SI
+                const padding = 20; 
+                
+                // Controlla se le coordinate sbattono contro il tasto SI
+                const overlapX = randomX < (rectSi.right + padding) && noRight > (rectSi.left - padding);
+                const overlapY = randomY < (rectSi.bottom + padding) && noBottom > (rectSi.top - padding);
+
+                if (overlapX && overlapY) {
+                    sovrappone = true; // Sbatte! Riprova.
+                } else {
+                    sovrappone = false; // Spazio libero trovato!
+                }
+                
+                tentativi++;
+            }
 
             btnNo.style.left = randomX + "px";
             btnNo.style.top = randomY + "px";
