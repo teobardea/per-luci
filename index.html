@@ -42,14 +42,14 @@
         }
 
         .media-iniziale {
-            width: 250px;
+            width: 250px; /* Dimensioni fisse per stabilità */
             height: auto;
             border-radius: 20px;
             margin-bottom: 20px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
             z-index: 20;
             border: 4px solid white;
-            pointer-events: none;
+            pointer-events: none; /* Evita che si possa cliccare l'immagine */
         }
 
         .btn-container {
@@ -59,7 +59,7 @@
             justify-content: center;
             z-index: 30;
             width: 100%;
-            height: 80px;
+            height: 80px; /* Spazio riservato ai bottoni */
         }
 
         button {
@@ -72,19 +72,20 @@
             cursor: pointer;
             box-shadow: 0 6px 15px rgba(0,0,0,0.2);
             transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
+            -webkit-tap-highlight-color: transparent; /* Rimuove il flash blu su mobile */
         }
 
         #btn-si {
             background-color: #4cd137;
             color: white;
             transform-origin: center;
+            /* Rimosso z-index fisso per evitare sovrapposizioni strane */
         }
 
         #btn-no {
             background-color: #ff4757;
             color: white;
-            transition: left 0.1s, top 0.1s;
+            transition: left 0.1s, top 0.1s; /* Movimento fluido */
         }
 
         #messaggio-successo {
@@ -95,6 +96,12 @@
             width: 100%;
             height: 100%;
             z-index: 50;
+        }
+
+        /* Classe per l'immagine finale se quella caricata fallisce */
+        .fallback-emoji {
+            font-size: 100px;
+            display: none;
         }
     </style>
 </head>
@@ -112,7 +119,9 @@
     </div>
 
     <div id="messaggio-successo">
-        <h1 style="font-size: 3rem; line-height: 1.2;">Ottima scelta marmotta! 🥰</h1>
+        <img class="media-iniziale" src="https://i.pinimg.com/originals/f6/a5/f7/f6a5f7ddff1f05cbcc560256b9f98c2e.gif" onerror="this.style.display='none'; document.querySelector('.fallback-emoji').style.display='block';" alt="Love">
+        <div class="fallback-emoji">❤️😍</div>
+        <h1 style="font-size: 2.5rem;">Ottima scelta marmotta! 🥰</h1>
     </div>
 
     <script>
@@ -121,37 +130,49 @@
         let grandezzaSi = 1;
         let tentativi = 0;
 
+        // Funzione unica per gestire il movimento
         function spostaNo(e) {
+            // Evita che il click venga eseguito su mobile se si tocca velocemente
             if(e) e.preventDefault(); 
             
             tentativi++;
 
+            // 1. Ingrandisci il tasto SI (lentamente)
             if (grandezzaSi < 10) {
                 grandezzaSi += 0.3;
                 btnSi.style.transform = `scale(${grandezzaSi})`;
             }
 
+            // 2. Calcola nuove coordinate
+            // Usiamo 'fixed' per muoverlo rispetto allo schermo intero
             btnNo.style.position = "fixed"; 
 
+            // Margine di sicurezza per non finire proprio sul bordo
             const margine = 50; 
+            
+            // Calcolo larghezza/altezza disponibile
             const maxX = window.innerWidth - btnNo.offsetWidth - margine;
             const maxY = window.innerHeight - btnNo.offsetHeight - margine;
 
+            // Genera numeri casuali
             const randomX = Math.random() * maxX + (margine / 2);
             const randomY = Math.random() * maxY + (margine / 2);
 
+            // Applica
             btnNo.style.left = randomX + "px";
             btnNo.style.top = randomY + "px";
         }
 
-        btnNo.addEventListener("mouseover", spostaNo); 
-        btnNo.addEventListener("touchstart", spostaNo); 
-        btnNo.addEventListener("click", spostaNo); 
+        // Aggiungiamo gli eventi sia per mouse che per touch (mobile)
+        btnNo.addEventListener("mouseover", spostaNo); // Per PC
+        btnNo.addEventListener("touchstart", spostaNo); // Per Telefono
+        btnNo.addEventListener("click", spostaNo); // Sicurezza extra
 
         function haDettoSi() {
             document.getElementById("schermata-domanda").style.display = "none";
             document.getElementById("messaggio-successo").style.display = "flex";
             
+            // Lancia i cuoricini
             creaCuori();
         }
 
@@ -169,11 +190,13 @@
                     cuore.style.zIndex = "100";
                     document.body.appendChild(cuore);
 
+                    // Animazione
                     requestAnimationFrame(() => {
                         cuore.style.top = "-10vh";
                         cuore.style.opacity = "0";
                     });
 
+                    // Pulizia
                     setTimeout(() => { cuore.remove(); }, 3000);
                 }, i * 50);
             }
@@ -182,4 +205,3 @@
 
 </body>
 </html>
-
