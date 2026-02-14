@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Per te ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            /* Sfondo animato bellissimo */
+            background: linear-gradient(-45deg, #ffb6c1, #ffc0cb, #ff69b4, #ff1493);
+            background-size: 400% 400%;
+            animation: gradienteSfondo 10s ease infinite;
+            font-family: 'Fredoka', sans-serif;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        @keyframes gradienteSfondo {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        h1 {
+            color: white;
+            padding: 20px;
+            z-index: 20;
+            position: relative;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 2.2rem;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 30;
+            height: 100px;
+        }
+
+        button {
+            border: none;
+            border-radius: 50px;
+            padding: 15px 35px;
+            font-size: 22px;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s ease-in-out, background-color 0.2s;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            white-space: nowrap;
+        }
+
+        #btn-si {
+            background-color: #4cd137;
+            color: white;
+            transform-origin: center;
+            animation: pulsa 2s infinite;
+        }
+
+        @keyframes pulsa {
+            0% { box-shadow: 0 0 0 0 rgba(76, 209, 55, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(76, 209, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(76, 209, 55, 0); }
+        }
+
+        #btn-no {
+            background-color: #ff4757;
+            color: white;
+            position: relative;
+        }
+
+        #messaggio-successo {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            z-index: 40;
+            animation: comparsa 1s ease-in-out;
+        }
+
+        @keyframes comparsa {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .media-iniziale {
+            max-width: 280px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            z-index: 20;
+            position: relative;
+            border: 4px solid white;
+        }
+
+        .cuore-volante {
+            position: absolute;
+            bottom: -10vh;
+            font-size: 2rem;
+            animation: vola 4s linear forwards;
+            z-index: 50;
+        }
+
+        @keyframes vola {
+            0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(-120vh) rotate(360deg) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="schermata-domanda">
+        <img class="media-iniziale" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTQyZ3N5Zzh4Z2w0OTZ6MzRyNzJ4ejZ2NWdyd2k2cW9xNGc5YjJ5ZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oriO6qJiXajN0TyDu/giphy.gif" alt="Orsetto tenero">
+        
+        <h1>Vuoi essere il mio San Valentino? 🥺</h1>
+        
+        <div class="btn-container">
+            <button id="btn-si" onclick="haDettoSi()">Sì! ❤️</button>
+            <button id="btn-no" onmouseover="provaAPremereNo()" ontouchstart="provaAPremereNo()">No 💔</button>
+        </div>
+    </div>
+
+    <div id="messaggio-successo">
+        <img class="media-iniziale" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzEzMDFxazY5NGg1cGFwZnNjZ3Z4bTQxbnp0b3BveXBxZGQxbHM3aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9JxRQ6KIJejeM/giphy.gif" alt="Esultanza">
+        <h1 style="color: white; font-size: 2.8rem;">Ottima scelta marmotta! 🥰🎉</h1>
+    </div>
+
+    <script>
+        let tentativiNo = 0;
+        let grandezzaSi = 1;
+
+        function provaAPremereNo() {
+            tentativiNo++;
+            let btnSi = document.getElementById("btn-si");
+            
+            // Dalla seconda volta il tasto SCAPPA e il SI si ingrandisce
+            if (tentativiNo >= 2) {
+                // Aumenta la grandezza del SI fino a diventare enorme (15 volte la grandezza iniziale)
+                if (grandezzaSi < 15) { 
+                    grandezzaSi += 1; 
+                }
+                btnSi.style.transform = `scale(${grandezzaSi})`;
+
+                // Fa scappare il tasto NO
+                scappa();
+            }
+        }
+
+        function scappa() {
+            let btnNo = document.getElementById("btn-no");
+            btnNo.style.position = "absolute";
+            
+            let margine = 40;
+            let maxX = window.innerWidth - btnNo.offsetWidth - margine;
+            let maxY = window.innerHeight - btnNo.offsetHeight - margine;
+            
+            let randomX = Math.max(margine, Math.floor(Math.random() * maxX));
+            let randomY = Math.max(margine, Math.floor(Math.random() * maxY));
+
+            btnNo.style.left = randomX + "px";
+            btnNo.style.top = randomY + "px";
+        }
+
+        // Funzione per la pioggia di cuori
+        function creaCuori() {
+            for(let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    let cuore = document.createElement("div");
+                    cuore.innerHTML = ["❤️", "💖", "💘", "✨"][Math.floor(Math.random() * 4)];
+                    cuore.classList.add("cuore-volante");
+                    cuore.style.left = Math.random() * 100 + "vw";
+                    cuore.style.fontSize = (Math.random() * 3 + 1) + "rem";
+                    cuore.style.animationDuration = (Math.random() * 2 + 2) + "s";
+                    document.body.appendChild(cuore);
+                }, i * 50);
+            }
+        }
+
+        function haDettoSi() {
+            // Nasconde la domanda e mostra la vittoria con i cuori!
+            document.getElementById("schermata-domanda").style.display = "none";
+            document.getElementById("messaggio-successo").style.display = "flex";
+            creaCuori();
+        }
+    </script>
+
+</body>
+</html>
