@@ -2,11 +2,12 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Per te ❤️</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap');
+
         body {
             margin: 0;
             padding: 0;
@@ -21,8 +22,7 @@
             animation: gradienteSfondo 10s ease infinite;
             font-family: 'Fredoka', sans-serif;
             text-align: center;
-            overflow: hidden;
-            /* Ho tolto il blocco che impediva di premere il tasto Sì sui telefoni! */
+            overflow: hidden; /* Niente scorrimento */
         }
 
         @keyframes gradienteSfondo {
@@ -34,26 +34,159 @@
         h1 {
             color: white;
             padding: 20px;
-            z-index: 20;
-            position: relative;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            font-size: 2rem;
+            font-size: 2.2rem;
             margin-bottom: 10px;
+            z-index: 10;
         }
 
         .media-iniziale {
             width: 250px;
-            height: auto;
             border-radius: 20px;
             margin-bottom: 20px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-            z-index: 20;
             border: 4px solid white;
+            z-index: 10;
+            background-color: white; /* Sfondo bianco nel caso l'immagine png abbia trasparenze */
         }
 
         .btn-container {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
             justify-content: center;
-            z-index:
+            z-index: 50; /* Sopra a tutto! */
+            width: 100%;
+            height: 100px;
+        }
+
+        button {
+            border: none;
+            border-radius: 50px;
+            padding: 15px 35px;
+            font-size: 20px;
+            font-family: 'Fredoka', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #btn-si {
+            background-color: #4cd137;
+            color: white;
+            transition: transform 0.2s ease; /* Crescita fluida */
+            position: relative;
+            z-index: 100; /* Assicura che sia sempre il primo a essere cliccato */
+        }
+
+        #btn-no {
+            background-color: #ff4757;
+            color: white;
+            position: relative;
+            z-index: 90;
+        }
+
+        #messaggio-successo {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            z-index: 50;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="schermata-domanda">
+        <img class="media-iniziale" src="https://i.imgur.com/Jk6I49Q.png" alt="Orsetto tenero">
+        
+        <h1>Vuoi essere il mio San Valentino? 🥺</h1>
+        
+        <div class="btn-container">
+            <button id="btn-si" onclick="haDettoSi()">Sì! ❤️</button>
+            <button id="btn-no">No 💔</button>
+        </div>
+    </div>
+
+    <div id="messaggio-successo">
+        <h1 style="font-size: 3.5rem; line-height: 1.2;">Ottima scelta marmotta! 🥰</h1>
+    </div>
+
+    <script>
+        const btnNo = document.getElementById("btn-no");
+        const btnSi = document.getElementById("btn-si");
+        let grandezzaSi = 1;
+
+        // --- GESTIONE TASTO NO CHE SCAPPA ---
+        function spostaNo() {
+            // Ingrandisce il SI
+            if (grandezzaSi < 10) {
+                grandezzaSi += 0.3;
+                btnSi.style.transform = `scale(${grandezzaSi})`;
+            }
+
+            // Sposta il NO
+            btnNo.style.position = "fixed"; 
+            const margine = 60; 
+            const maxX = window.innerWidth - btnNo.offsetWidth - margine;
+            const maxY = window.innerHeight - btnNo.offsetHeight - margine;
+
+            const randomX = Math.floor(Math.random() * maxX) + (margine / 2);
+            const randomY = Math.floor(Math.random() * maxY) + (margine / 2);
+
+            btnNo.style.left = randomX + "px";
+            btnNo.style.top = randomY + "px";
+        }
+
+        // Si attiva se passi col mouse (su PC)
+        btnNo.addEventListener("mouseenter", spostaNo); 
+        
+        // Si attiva se provi a toccarlo (su Telefono) e impedisce il click
+        btnNo.addEventListener("touchstart", function(e) { 
+            e.preventDefault(); 
+            spostaNo(); 
+        }, {passive: false});
+
+
+        // --- GESTIONE TASTO SÌ (VITTORIA) ---
+        function haDettoSi() {
+            // Nasconde la domanda
+            document.getElementById("schermata-domanda").style.display = "none";
+            // Mostra la scritta finale
+            document.getElementById("messaggio-successo").style.display = "flex";
+            
+            // Fa piovere i cuori
+            creaCuori();
+        }
+
+        function creaCuori() {
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const cuore = document.createElement("div");
+                    cuore.innerHTML = "❤️";
+                    cuore.style.position = "fixed";
+                    cuore.style.left = Math.random() * 100 + "vw";
+                    cuore.style.top = "100vh";
+                    cuore.style.fontSize = (Math.random() * 20 + 20) + "px";
+                    cuore.style.transition = "top 3s ease-out, opacity 3s";
+                    cuore.style.zIndex = "1000";
+                    document.body.appendChild(cuore);
+
+                    // Fa partire l'animazione verso l'alto
+                    requestAnimationFrame(() => {
+                        cuore.style.top = "-10vh";
+                        cuore.style.opacity = "0";
+                    });
+
+                    // Lo cancella dopo che è volato via
+                    setTimeout(() => { cuore.remove(); }, 3000);
+                }, i * 50); 
+            }
+        }
+    </script>
+
+</body>
+</html>
