@@ -102,6 +102,7 @@
             z-index: 20;
             position: relative;
             border: 4px solid white;
+            background-color: rgba(255, 255, 255, 0.5); /* Sfondo semi-trasparente per aiutare il caricamento */
         }
 
         .cuore-volante {
@@ -132,7 +133,7 @@
     </div>
 
     <div id="messaggio-successo">
-        <img class="media-iniziale" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzEzMDFxazY5NGg1cGFwZnNjZ3Z4bTQxbnp0b3BveXBxZGQxbHM3aSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9JxRQ6KIJejeM/giphy.gif" alt="Esultanza">
+        <img class="media-iniziale" src="https://media.tenor.com/qL3bEwA2v-wAAAAi/bubu-dudu-kisses.gif" alt="Esultanza">
         <h1 style="color: white; font-size: 2.8rem;">Ottima scelta marmotta! 🥰🎉</h1>
     </div>
 
@@ -144,15 +145,15 @@
             tentativiNo++;
             let btnSi = document.getElementById("btn-si");
             
-            // Dalla seconda volta il tasto SCAPPA e il SI si ingrandisce
-            if (tentativiNo >= 2) {
-                // Aumenta la grandezza del SI fino a diventare enorme (15 volte la grandezza iniziale)
-                if (grandezzaSi < 15) { 
-                    grandezzaSi += 1; 
-                }
-                btnSi.style.transform = `scale(${grandezzaSi})`;
+            // Aumenta la grandezza del SI molto più LENTAMENTE (0.5 alla volta)
+            // così si può giocare col tasto NO più a lungo.
+            if (grandezzaSi < 20) { 
+                grandezzaSi += 0.5; 
+            }
+            btnSi.style.transform = `scale(${grandezzaSi})`;
 
-                // Fa scappare il tasto NO
+            // Dalla seconda volta in poi il tasto SCAPPA
+            if (tentativiNo >= 2) {
                 scappa();
             }
         }
@@ -161,7 +162,8 @@
             let btnNo = document.getElementById("btn-no");
             btnNo.style.position = "absolute";
             
-            let margine = 40;
+            // Margine aumentato per evitare che esca dallo schermo sui telefoni
+            let margine = 60; 
             let maxX = window.innerWidth - btnNo.offsetWidth - margine;
             let maxY = window.innerHeight - btnNo.offsetHeight - margine;
             
@@ -188,7 +190,6 @@
         }
 
         function haDettoSi() {
-            // Nasconde la domanda e mostra la vittoria con i cuori!
             document.getElementById("schermata-domanda").style.display = "none";
             document.getElementById("messaggio-successo").style.display = "flex";
             creaCuori();
