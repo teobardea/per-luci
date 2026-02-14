@@ -31,24 +31,38 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* --- NUOVI STILI PER IL MESSAGGIO INIZIALE --- */
+        /* --- STILI PER IL MESSAGGIO INIZIALE --- */
         .intro-container {
             margin-bottom: 20px;
             z-index: 10;
             padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .intro-cuore-gigante {
-            font-size: 80px; /* Cuore enorme */
+            font-size: 80px;
             display: block;
-            margin-bottom: 10px;
-            animation: battito 1.5s infinite; /* Un piccolo effetto batticuore */
+            margin-bottom: 15px;
+            animation: battito 1.5s infinite;
         }
+        
+        /* IL NUOVO BOX QUADRATO NERO */
+        .banana-box {
+            background-color: black;
+            border: 4px solid white; /* Bordo bianco spesso */
+            padding: 20px; /* Spazio interno */
+            border-radius: 10px; /* Angoli leggermente arrotondati per estetica */
+            max-width: 90%; /* Per non toccare i bordi su cellulare */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3); /* Ombra per farlo risaltare */
+        }
+
         .intro-testo-banana {
-            color: white;
-            font-size: 1.5rem; /* Dimensione del testo banana bread */
+            color: white; /* Scritta bianca */
+            font-size: 1.6rem;
             font-weight: 600;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
             margin: 0;
+            line-height: 1.3;
         }
         @keyframes battito {
             0%, 100% { transform: scale(1); }
@@ -118,7 +132,9 @@
     <div id="schermata-domanda">
         <div class="intro-container">
             <span class="intro-cuore-gigante">❤️</span>
-            <p class="intro-testo-banana">mi sono impegnato quasi come per fare il banana bread 🙃</p>
+            <div class="banana-box">
+                <p class="intro-testo-banana">mi sono impegnato quasi come per fare il banana bread 🙃</p>
+            </div>
         </div>
         
         <h1>Vuoi essere il mio San Valentino? 🥺</h1>
